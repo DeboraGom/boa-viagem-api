@@ -21,7 +21,7 @@ public class Viagem {
 	@Column(name = "ID_VIAGEM")
 	private Long id;
 	
-	@Column(name = "TX_DESTINP")
+	@Column(name = "TX_DESTINO")
 	private String destino;
 	
 	@Column(name = "TP_VIAGEM")
