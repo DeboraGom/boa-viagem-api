@@ -1,4 +1,5 @@
 package br.com.etechoracio.boa_viagem.repository;
+/////repository gastos
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
