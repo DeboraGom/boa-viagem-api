@@ -12,24 +12,25 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import br.com.etechoracio.boa_viagem.entity.Viagem;
-import br.com.etechoracio.boa_viagem.repository.ViagemRepository;
+import br.com.etechoracio.boa_viagem.service.ViagemService;
 
 @RestController
 @RequestMapping("/viagens")
 public class ViagemController {
 	
 	@Autowired
-	private ViagemRepository repository;
+	private ViagemService service;
 	
 	@GetMapping
 	public List<Viagem> listarTodos() {
-		return repository.findAll();
+		return service.listarTodos();
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Viagem> buscarPorId(@PathVariable Long id) {
-		Optional<Viagem> existe = repository.findById(id);
+		Optional<Viagem> existe = service.buscarPorId(id);
 		
 		if (existe.isPresent()) {
 			return ResponseEntity.ok(existe.get());
@@ -40,10 +41,9 @@ public class ViagemController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> excluir(@PathVariable Long id) {
-		boolean existe = repository.existsById(id);
+		boolean existe = service.excluir(id);
 
 		if (existe) {
-			repository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} 
 		else
@@ -52,18 +52,17 @@ public class ViagemController {
 	
 	@PostMapping 
 	public ResponseEntity<Viagem> inserir(@RequestBody Viagem obj) {
-		repository.save(obj);
+		service.inserir(obj);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Viagem> atualizar(@PathVariable Long id, @RequestBody Viagem viagem) {
-		boolean existe = repository.existsById(id);
+		Optional<Viagem> existe = service.atualizar(id, viagem);
 		
-		if (!existe) {
+		if (!existe.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		repository.save(viagem);
 		return ResponseEntity.ok(viagem);
-	}
+	} 
 }

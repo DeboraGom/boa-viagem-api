@@ -15,22 +15,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.etechoracio.boa_viagem.entity.Gastos;
 import br.com.etechoracio.boa_viagem.repository.GastosRepository;
+import br.com.etechoracio.boa_viagem.service.GastosService;
 
 @RestController
 @RequestMapping("/gastos")
 public class GastoController {
 
 	@Autowired
-	private GastosRepository repository;
+	private GastosService service;
 
 	@GetMapping
 	public List<Gastos> listarTodos() {
-		return repository.findAll();
+		return service.listarTodos();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Gastos> buscarPorId(@PathVariable Long id) {
-		Optional<Gastos> existe = repository.findById(id);
+		Optional<Gastos> existe = service.buscarPorId(id);
 		
 		if (existe.isPresent()) {
 			return ResponseEntity.ok(existe.get());
@@ -40,10 +41,9 @@ public class GastoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> excluir(@PathVariable Long id) {
-		boolean existe = repository.existsById(id);
+		boolean existe = service.excluir(id);
 
 		if (existe) {
-			repository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} 
 		else
@@ -52,18 +52,17 @@ public class GastoController {
 	
 	@PostMapping 
 	public ResponseEntity<Gastos> inserir(@RequestBody Gastos obj) {
-		repository.save(obj);
+		service.inserir(obj);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Gastos> atualizar(@PathVariable Long id, @RequestBody Gastos gasto) {
-		boolean existe = repository.existsById(id);
+		Optional<Gastos> existe = service.atualizar(id, gasto);
 		
-		if (!existe) {
+		if (!existe.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		repository.save(gasto);
 		return ResponseEntity.ok(gasto);
 	}
 }

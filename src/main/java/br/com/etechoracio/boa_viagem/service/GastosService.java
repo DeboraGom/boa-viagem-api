@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.etechoracio.boa_viagem.entity.Gastos;
 import br.com.etechoracio.boa_viagem.repository.GastosRepository;
-
+@Service
 public class GastosService {
 	@Autowired
 	private GastosRepository repository;
