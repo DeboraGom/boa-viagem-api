@@ -10,5 +10,5 @@ import br.com.etechoracio.boa_viagem.entity.Gastos;
 
 
 public interface GastosRepository extends JpaRepository<Gastos, Long>{
-	List<Gastos> FindByViagemId(Long id);
+	List<Gastos> findByViagemId(Long id);
 }

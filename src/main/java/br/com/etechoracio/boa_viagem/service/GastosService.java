@@ -14,8 +14,6 @@ import br.com.etechoracio.boa_viagem.repository.ViagemRepository;
 public class GastosService {
 	@Autowired
 	private GastosRepository repository;
-	@Autowired
-	private ViagemRepository viagemRepository;
 	
 	public List<Gastos> listarTodos() {
 		return repository.findAll();
@@ -40,19 +38,31 @@ public class GastosService {
 			throw new RuntimeException("Viagem não encontrada");
 		}
 		
-		if(existe.get().getViagem().getSaida().isPresent()){
-			
+		if(existe.get().getViagem().getSaida() != null){
+			throw new RuntimeException("Viagem encontrada já foi fechada (data de saída preenchida)");
+		}
+		
+		if (existe.get().getData().isBefore(existe.get().getViagem().getChegada())) {
+			throw new RuntimeException("A data do gasto é anterior à data de entrada da viagem");
 		}
 		
 		return repository.save(obj);
 	}
 	
 	public Optional<Gastos> atualizar(Long id, Gastos gasto) {
-		boolean existe = repository.existsById(id);
+		Optional<Gastos> existe = repository.findById(gasto.getViagem().getId());
 	
-		if (!existe) { 
+		if (!existe.isPresent()) { 
 			return Optional.empty();
 	    }
+		
+		if (existe.get().getId() != id) {
+			throw new RuntimeException("A viagem de atualização não é a mesma viagem da inserção");
+		}
+		
+		if (existe.get().getData().isBefore(existe.get().getViagem().getChegada())) {
+			throw new RuntimeException("A data do gasto é anterior à data de entrada da viagem");
+		}
 		return Optional.of(repository.save(gasto));
 	}
 }

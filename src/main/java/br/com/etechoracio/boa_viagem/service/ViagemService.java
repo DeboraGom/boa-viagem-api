@@ -33,7 +33,7 @@ public class ViagemService {
 		if (!existe) { 
 			return existe;
 		}
-		List<Gastos> gastos = gastosRepository.FindByViagemId(id);
+		List<Gastos> gastos = gastosRepository.findByViagemId(id);
 		if (!gastos.isEmpty()) {
 			gastosRepository.deleteAll(gastos);
 		}
