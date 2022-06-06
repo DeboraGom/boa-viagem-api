@@ -45,7 +45,6 @@ public class ViagemService {
 	public Viagem inserir(Viagem obj) {
 		return repository.save(obj);
 	}
-	
 
 	public Optional<Viagem> atualizar(Long id, Viagem viagem) {
 		boolean existe = repository.existsById(id);

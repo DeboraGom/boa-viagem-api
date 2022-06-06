@@ -1,6 +1,5 @@
 package br.com.etechoracio.boa_viagem.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.etechoracio.boa_viagem.entity.Gastos;
 import br.com.etechoracio.boa_viagem.repository.GastosRepository;
-import br.com.etechoracio.boa_viagem.repository.ViagemRepository;
 @Service
 public class GastosService {
 	@Autowired
@@ -56,7 +54,7 @@ public class GastosService {
 			return Optional.empty();
 	    }
 		
-		if (existe.get().getId() != id) {
+		if (id != existe.get().getViagem().getId()) {
 			throw new RuntimeException("A viagem de atualização não é a mesma viagem da inserção");
 		}
 		
